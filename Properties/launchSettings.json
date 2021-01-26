@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "AccountCalc.Server": {
+      "commandName": "Project",
+      "commandLineArgs": "--ip 127.0.0.1 --port 7000",
+      "applicationUrl": "http://localhost:7000"
+    }
+  }
+}
