@@ -1,9 +1,12 @@
 using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace AccountCalc.Server
 {
-    public class WeatherForecast
+    public class TestModel
     {
+        [Key]
+        public int md { get; set; }
         public DateTime Date { get; set; }
 
         public int TemperatureC { get; set; }
