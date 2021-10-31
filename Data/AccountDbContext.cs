@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace AccountCalc.Server.Data
 {
-    public class TestDbContext:DbContext
+    public class AccountDbContext:DbContext
     {
-        public TestDbContext(DbContextOptions options) : base(options) { }
-        public DbSet<TestModel> User_Login { get; set; }
+        public AccountDbContext(DbContextOptions options) : base(options) { }
+        public DbSet<AccountModel> account { get; set; }
     }
 }

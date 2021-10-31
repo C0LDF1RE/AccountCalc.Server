@@ -21,7 +21,7 @@ namespace AccountCalc.Server
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddDbContext<TestDbContext>(options =>
+            services.AddDbContext<AccountDbContext>(options =>
             {
                 options.UseMySQL(Configuration.GetConnectionString("Primary"));
             });
