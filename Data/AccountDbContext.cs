@@ -9,6 +9,6 @@ namespace AccountCalc.Server.Data
     public class AccountDbContext:DbContext
     {
         public AccountDbContext(DbContextOptions options) : base(options) { }
-        public DbSet<AccountModel> account { get; set; }
+        public DbSet<AccountModel> Account { get; set; }
     }
 }

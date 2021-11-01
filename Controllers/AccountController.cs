@@ -1,11 +1,7 @@
-﻿using AccountCalc.Server.Data;
+﻿using AccountCalc.Server.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace AccountCalc.Server.Controllers
@@ -14,16 +10,17 @@ namespace AccountCalc.Server.Controllers
     [Route("api/[controller]/[action]")]
     public class AccountController : ControllerBase
     {
-        private readonly AccountDbContext _db;
-        private readonly ILogger<AccountController> _logger;
-        public AccountController(AccountDbContext db, ILogger<AccountController> logger)
+        private AccountService _service;
+
+        [HttpGet]
+        public async Task<IActionResult> GetMonthData(long startTime, long endTime)
         {
-            _db = db;
-            _logger = logger;
+            await _service.GetMonthData(startTime,endTime);
+            return new JsonResult("OK");
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] AccountModel account)
+        public async Task<IActionResult> PostAccount([FromBody] AccountModel account)
         {
             foreach(PropertyDescriptor descriptor in TypeDescriptor.GetProperties(account))
             {
@@ -36,24 +33,19 @@ namespace AccountCalc.Server.Controllers
             {
                 return new JsonResult("Error");
             }
-            _db.account.Add(account);
-
-            await _db.SaveChangesAsync();
+            await _service.Add(account);
             return new JsonResult(account);
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateList([FromBody] AccountModel[] accounts)
+        public async Task<IActionResult> PostAccounts([FromBody] AccountModel[] accounts)
         {
             if (!ModelState.IsValid)
             {
                 return new JsonResult("Error");
             }
-            _db.account.AddRange(accounts);
-
-            await _db.SaveChangesAsync();
+            await _service.AddList(accounts);
             return new JsonResult(value: accounts);
         }
-
     }
 }
