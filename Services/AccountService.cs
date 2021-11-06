@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -11,11 +13,13 @@ namespace AccountCalc.Server.Services
     public class AccountService
     {
         private readonly AccountDbContext _db;
-        private readonly ILogger<AccountService> _logger;
-        public AccountService(AccountDbContext db, ILogger<AccountService> logger)
+        //private readonly ILogger<AccountService> _logger;
+        public AccountService(AccountDbContext db
+            //, ILogger<AccountService>? logger
+            )
         {
             _db = db;
-            _logger = logger;
+            //_logger = logger;
         }
 
         public async Task<int> Add(AccountModel account)
@@ -24,14 +28,16 @@ namespace AccountCalc.Server.Services
             return await _db.SaveChangesAsync();
         }
 
-        public async Task<IActionResult> GetMonthData(long startTime, long endTime)
+        public async Task<List<AccountModel>> GetMonthData(DateTime startTime, DateTime endTime)
         {
-            var accounts = await _db.Account.Where(a => a.timestamp >= startTime && a.timestamp <= endTime).ToListAsync();
+            var accounts = await _db.Account
+                .Where(a => a.createTime >= startTime && a.createTime <= endTime)
+                .ToListAsync();
             if (accounts == null)
             {
                 //return NotFoundResult();
             }
-            return new JsonResult(accounts);
+            return accounts;
         }
 
         public async Task<int> AddList(AccountModel[] accounts)
